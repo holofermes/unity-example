@@ -7,7 +7,6 @@ using RoomOptions = LiveKit.RoomOptions;
 using System.Collections.Generic;
 using Application = UnityEngine.Application;
 using TMPro;
-using System.Xml;
 
 public class LivekitSamples : MonoBehaviour
 {
@@ -185,7 +184,7 @@ public class LivekitSamples : MonoBehaviour
         else if (track is RemoteAudioTrack audioTrack)
         {
             GameObject audObject = new GameObject(audioTrack.Sid);
-            var source = audObject.AddComponent<AudioSource>();
+            var source = audObject.AddComponent<MicrophoneSource>();
             var stream = new AudioStream(audioTrack, source);
             _audioObjects[audioTrack.Sid] = audObject;
         }
@@ -228,9 +227,8 @@ public class LivekitSamples : MonoBehaviour
         // Publish Microphone
         var localSid = "my-audio-source";
         GameObject audObject = new GameObject(localSid);
-        var source = audObject.AddComponent<AudioSource>();
-        source.clip = Microphone.Start(Microphone.devices[0], true, 2, (int)RtcAudioSource.DefaultMirophoneSampleRate);
-        source.loop = true;
+        var source = audObject.AddComponent<MicrophoneSource>();
+        source.Configure(Microphone.devices[0], true, 2, (int)RtcAudioSource.DefaultMirophoneSampleRate);
 
         _audioObjects[localSid] = audObject;
 
@@ -252,7 +250,7 @@ public class LivekitSamples : MonoBehaviour
             Debug.Log("Track published!");
         }
 
-        rtcSource.Start();
+        yield return rtcSource.PrepareAndStart();
     }
 
     public IEnumerator publishVideo()
