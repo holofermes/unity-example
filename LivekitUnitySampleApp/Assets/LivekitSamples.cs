@@ -184,7 +184,7 @@ public class LivekitSamples : MonoBehaviour
         else if (track is RemoteAudioTrack audioTrack)
         {
             GameObject audObject = new GameObject(audioTrack.Sid);
-            var source = audObject.AddComponent<MicrophoneSource>();
+            var source = audObject.AddComponent<RemoteAudioSource>();
             var stream = new AudioStream(audioTrack, source);
             _audioObjects[audioTrack.Sid] = audObject;
         }
